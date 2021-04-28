@@ -79,25 +79,6 @@ void encrypt_data(const char *input, const string output_file, const string key_
     cout << "Shift: " << shift << endl;
     cout << "Random length: " << random_data_length << endl;
 
-    // unsigned char random_data[random_data_length];
-
-    // for (unsigned int i = 0; i < random_data_length; i++) {
-    // 	random_data[i] = gen() % 256;
-    // }
-
-    // unsigned int random_data_index = 0;
-    // unsigned int key_index = 0;
-
-    // for (unsigned int i = 0; i < message.size(); i++) {
-    // 	random_data[random_data_index] = message[i] ^ key[key_index];
-    // 	random_data_index = (random_data_index + shift) % random_data_length;
-    // 	key_index = (key_index + 1) % key_length;
-    // }
-
-    // random_data[random_data_index] = '\0' ^ key[key_index];
-
-    // output.write((const char *)random_data, random_data_length);
-
     char byte;
 
     for (unsigned int i = 0; i < random_data_length; i++) {
