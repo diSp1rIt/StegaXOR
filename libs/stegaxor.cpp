@@ -79,7 +79,7 @@ void encrypt_data(const char *input, const string output_file, const string key_
 
 	string message (input);
 
-    for (unsigned int i = message.size() + 1; i < 2 * message.size(); i++) {
+    for (unsigned int i = message.size() * 2; i < message.size() * 3; i++) {
     	if (gcd(i, key_length % i) == 1) {
     		shift = key_length % i;
     		random_data_length = i;
