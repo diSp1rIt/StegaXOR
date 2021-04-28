@@ -1,5 +1,5 @@
 CC=g++
-LIBS=libs/stegaxor.cpp
+LIBS=libs/stegaxor.cpp libs/keygen.cpp
 EXECUTABLE=crypt
 
 default:
@@ -10,7 +10,6 @@ $(EXECUTABLE):
 
 test: $(EXECUTABLE)
 	./$(EXECUTABLE) "test message"
-	clear
 	hexdump output
 
 clear:
