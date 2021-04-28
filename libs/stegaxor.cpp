@@ -56,7 +56,7 @@ static unsigned int get_file_size(const string file) {
 }
 
 
-void encrypt_data(const char *input, const string output_file, const string key_file) {
+void encrypt_data(const char *input, const unsigned int data_len, const string output_file, const string key_file) {
 	load_key(key_file);
 
 	ofstream output (output_file, ios_base::trunc);
@@ -66,9 +66,7 @@ void encrypt_data(const char *input, const string output_file, const string key_
 		exit(-1);
 	}
 
-	string message (input);
-
-    for (unsigned int i = message.size() * 2; i < message.size() * 3; i++) {
+    for (unsigned int i = data_len * 2; i < data_len * 3; i++) {
     	if (gcd(i, key_length % i) == 1) {
     		shift = key_length % i;
     		random_data_length = i;
@@ -89,7 +87,7 @@ void encrypt_data(const char *input, const string output_file, const string key_
     unsigned int data_index = 0;
     unsigned int key_index = 0;
     
-    for (unsigned int i = 0; i < message.size(); i++) {
+    for (unsigned int i = 0; i < data_len; i++) {
     	byte = message[i] ^ key[key_index];
     	output.seekp(data_index, ios_base::beg);
     	output.write(&byte, 1);
