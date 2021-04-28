@@ -88,7 +88,7 @@ void encrypt_data(const char *input, const unsigned int data_len, const string o
     unsigned int key_index = 0;
     
     for (unsigned int i = 0; i < data_len; i++) {
-    	byte = message[i] ^ key[key_index];
+    	byte = input[i] ^ key[key_index];
     	output.seekp(data_index, ios_base::beg);
     	output.write(&byte, 1);
     	data_index = (data_index + shift) % random_data_length;
