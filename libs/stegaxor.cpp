@@ -35,25 +35,14 @@ static void load_key(const string key_file) {
 }
 
 
-static unsigned int gcd(unsigned int a, unsigned int b) {
-	if (a == 0)
-		return b;
-	if (b == 0)
-		return a;
-	if (a == b)
-		return a;
-	if (a == 1 or b == 1)
-		return 1;
-	if (!(a ^ 2) && !(b ^ 2))
-		return 2 * gcd(a / 2, b / 2);
-	if (!(a ^ 2))
-		return gcd(a / 2, b);
-	if (!(b ^ 2))
-		return gcd(a, b / 2);
-	if (a > b)
-		return gcd((a - b) / 2, b);
-	if (b > a)
-		return gcd((b - a) / a, a);
+static unsigned int gcd (unsigned int a, unsigned int b) { 
+	unsigned int t;
+	while (b != 0) {
+		t = b;
+		b = a % b;
+		a = t;
+	}
+	return a;
 }
 
 
@@ -87,28 +76,51 @@ void encrypt_data(const char *input, const string output_file, const string key_
     	}
     }
 
-    cout << "Random length: " << random_data_length << endl;
     cout << "Shift: " << shift << endl;
+    cout << "Random length: " << random_data_length << endl;
 
-    unsigned char random_data[random_data_length];
+    // unsigned char random_data[random_data_length];
+
+    // for (unsigned int i = 0; i < random_data_length; i++) {
+    // 	random_data[i] = gen() % 256;
+    // }
+
+    // unsigned int random_data_index = 0;
+    // unsigned int key_index = 0;
+
+    // for (unsigned int i = 0; i < message.size(); i++) {
+    // 	random_data[random_data_index] = message[i] ^ key[key_index];
+    // 	random_data_index = (random_data_index + shift) % random_data_length;
+    // 	key_index = (key_index + 1) % key_length;
+    // }
+
+    // random_data[random_data_index] = '\0' ^ key[key_index];
+
+    // output.write((const char *)random_data, random_data_length);
+
+    char byte;
 
     for (unsigned int i = 0; i < random_data_length; i++) {
-    	random_data[i] = gen() % 256;
+    	byte = gen() % 256;
+    	output.write(&byte, 1);
     }
 
-    unsigned int random_data_index = 0;
+    unsigned int data_index = 0;
     unsigned int key_index = 0;
-
+    
     for (unsigned int i = 0; i < message.size(); i++) {
-    	random_data[random_data_index] = message[i] ^ key[key_index];
-    	random_data_index = (random_data_index + shift) % random_data_length;
+    	byte = message[i] ^ key[key_index];
+    	output.seekp(data_index, ios_base::beg);
+    	output.write(&byte, 1);
+    	data_index = (data_index + shift) % random_data_length;
     	key_index = (key_index + 1) % key_length;
     }
 
-    random_data[random_data_index] = '\0' ^ key[key_index];
+    byte = '\0' ^ key[key_index];
+    output.seekp(data_index, ios_base::beg);
+    output.write(&byte, 1);
 
-    output.write((const char *)random_data, random_data_length);
-
+    output.seekp(0, ios_base::beg);
 	if (output.is_open())
 		output.close();
 }
@@ -140,18 +152,18 @@ void decrypt_file(const string input_file, const string output_file, const strin
 	unsigned int shift = key_length % data_len; 
 
 	unsigned int i = 0;
-	unsigned int random_data_index = 0;
+	unsigned int data_index = 0;
     unsigned int key_index = 0;
 
 	while (true) {
-    	decrypted_bytes[i] = data_bytes[random_data_index] ^ key[key_index];
-    	random_data_index = (random_data_index + shift) % random_data_length;
+    	decrypted_bytes[i] = data_bytes[data_index] ^ key[key_index];
+    	data_index = (data_index + shift) % random_data_length;
     	key_index = (key_index + 1) % key_length;
-    	i++;
-    	if (decrypted_bytes[i - 1] == '\0') {
-    		decrypted_len = i - 1;
+    	if (decrypted_bytes[i] == '\0') {
+    		decrypted_len = i;
     		break;
     	}
+    	i++;
     }
 
     output.write(decrypted_bytes, decrypted_len);
