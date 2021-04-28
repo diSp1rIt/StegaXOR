@@ -15,7 +15,7 @@ void generate(const string output_file) {
 	char *key = new char [1024];
 
 	for (short i = 0; i < 1024; i++) {
-		key = gen();
+		key[i]= gen() % 256;
 	}
 
 	output.write(key, 1024);

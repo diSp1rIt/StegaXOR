@@ -4,6 +4,7 @@
 #include <fstream>
 #include <random>
 #include <string>
+#include <iostream>
 
 
 using namespace std;
