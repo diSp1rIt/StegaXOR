@@ -1,2 +1,2 @@
 # StegaXOR
-Chipher that using steganography method and xor cryption.
+Cipher that using steganography method and xor cryption.
