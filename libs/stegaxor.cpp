@@ -183,8 +183,6 @@ void StegaXOR::encrypt_b2b(const char *input, const unsigned int input_len) {
 
     this->encrypted_bytes = new char [this->random_data_length];
 
-    char byte;
-
     for (unsigned int i = 0; i < random_data_length; i++) {
     	this->encrypted_bytes[i] = this->gen() % 256;
     }
