@@ -1,5 +1,5 @@
 CC=g++
-LIBS=libs/stegaxor.cpp libs/keygen.cpp
+LIBS=libs/stegaxor.cpp libs/keygen.cpp libs/argparser.cpp
 EXECUTABLE=crypt
 
 default:

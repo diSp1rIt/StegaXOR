@@ -35,7 +35,7 @@ static void load_key(const string key_file) {
 }
 
 
-static unsigned int gcd (unsigned int a, unsigned int b) { 
+static unsigned int gcd(unsigned int a, unsigned int b) { 
 	unsigned int t;
 	while (b != 0) {
 		t = b;
@@ -99,7 +99,6 @@ void encrypt_data(const char *input, const unsigned int data_len, const string o
     output.seekp(data_index, ios_base::beg);
     output.write(&byte, 1);
 
-    output.seekp(0, ios_base::beg);
 	if (output.is_open())
 		output.close();
 }
@@ -134,9 +133,12 @@ void decrypt_file(const string input_file, const string output_file, const strin
 	unsigned int data_index = 0;
     unsigned int key_index = 0;
 
+    cout << "Shift: " << shift << endl;
+    cout << "Random length: " << data_len << endl;
+
 	while (true) {
     	decrypted_bytes[i] = data_bytes[data_index] ^ key[key_index];
-    	data_index = (data_index + shift) % random_data_length;
+    	data_index = (data_index + shift) % data_len;
     	key_index = (key_index + 1) % key_length;
     	if (decrypted_bytes[i] == '\0') {
     		decrypted_len = i;
