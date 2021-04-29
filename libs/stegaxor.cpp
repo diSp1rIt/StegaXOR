@@ -56,7 +56,7 @@ static unsigned int get_file_size(const string file) {
 }
 
 
-void encrypt_data(const char *input, const unsigned int data_len, const string output_file, const string key_file) {
+void encrypt_b2f(const char *input, const unsigned int data_len, const string output_file, const string key_file) {
 	load_key(key_file);
 
 	ofstream output (output_file, ios_base::trunc);
@@ -104,7 +104,7 @@ void encrypt_data(const char *input, const unsigned int data_len, const string o
 }
 
 
-void decrypt_file(const string input_file, const string output_file, const string key_file) {
+void decrypt_f2f(const string input_file, const string output_file, const string key_file) {
 	unsigned int data_len = get_file_size(input_file);
 	char *data_bytes = new char [data_len];
 	char *decrypted_bytes = new char [data_len];

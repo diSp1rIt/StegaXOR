@@ -24,12 +24,12 @@ int main(int argc, char const *argv[]) {
 			cout << "Key generated\n";
 			break;
 		case ENCRYPT:
-			encrypt_data(text.c_str(), text.size(), output_file, string("xor.key"));
+			encrypt_b2f(text.c_str(), text.size(), output_file, string("xor.key"));
 			cout << text.c_str() << endl;
 			cout << "Message encrypted\n";
 			break;
 		case DECRYPT:
-			decrypt_file(input_file, output_file, string("xor.key"));
+			decrypt_f2f(input_file, output_file, string("xor.key"));
 			cout << "Message decrypted\n";
 			break;
 		case ERROR:
