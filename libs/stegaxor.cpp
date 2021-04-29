@@ -144,11 +144,11 @@ StegaXOR::StegaXOR(const string key_file) {
 
 		for (unsigned short i = 0; i < 1024; i++) {
 			char byte = this->gen() % 256;
-			key[i] = byte;
+			this->key[i] = byte;
 			fd_.write(&byte, 1);
 		}
 		fd_.close();
-
+		this->key_length = 1024;
 		cout << "Key generated" << endl;
 	} else {
 		for (int i = 0; i < 1024; i++) {
@@ -178,12 +178,12 @@ void StegaXOR::encrypt_b2b(const char *input, const unsigned int input_len) {
     	}
     }
 
-    cout << "Shift: " << shift << endl;
+    cout << "Shift: " << this->shift << endl;
     cout << "Random length: " << this->random_data_length << endl;
 
     this->encrypted_bytes = new char [this->random_data_length];
 
-    for (unsigned int i = 0; i < random_data_length; i++) {
+    for (unsigned int i = 0; i < this->random_data_length; i++) {
     	this->encrypted_bytes[i] = this->gen() % 256;
     }
 
