@@ -15,7 +15,6 @@ extern string key_file;
 extern string text;
 extern string output_file;
 extern string input_file;
-extern char *data_bytes;
 
 
 int main(int argc, char const *argv[]) {
@@ -37,13 +36,15 @@ int main(int argc, char const *argv[]) {
 	// 		cerr << "Error with parsing argument\n";
 	// 		exit(-1);
 	// }
-	StegaXOR cryptor (string("xor.key"));
-	char message[] = "Hello, world!";
-	cout << "Message length: " << strlen(message) << endl;
-	cryptor.encrypt_b2b(message, strlen(message));
-	cout << "Encrypted length: " << cryptor.get_encrypted_len() << endl;
-	cryptor.decrypt_b2b(cryptor.get_encrypted(), cryptor.get_encrypted_len());
-	cout << "Decrypted length: " << cryptor.get_decrypted_len() << endl;
-	cout << "Decrypted message: " << cryptor.get_decrypted() << endl;
+	
+	// StegaXOR cryptor1 (string("xor.key"));
+	// StegaXOR cryptor2 (string("test.key"));
+	// char message[] = "Hello, world!";
+	// cout << "Message length: " << strlen(message) << endl;
+	// cryptor1.encrypt_b2b(message, strlen(message));
+	// cout << "Encrypted length: " << cryptor1.get_encrypted_len() << endl;
+	// cryptor2.decrypt_b2b(cryptor1.get_encrypted(), cryptor1.get_encrypted_len());
+	// cout << "Decrypted length: " << cryptor2.get_decrypted_len() << endl;
+	// cout << "Decrypted message: " << cryptor2.get_decrypted() << endl;
 	return 0;
 }

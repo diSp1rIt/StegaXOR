@@ -1,18 +1,6 @@
 #include "stegaxor.h"
 
 
-// char *data_bytes;
-
-
-// static random_device gen;
-
-// static unsigned int random_data_length = 0;
-// static unsigned int shift = 0;
-
-// static unsigned char *key = new unsigned char [1024];
-// static unsigned int key_length = 0;
-
-
 static unsigned int gcd(unsigned int a, unsigned int b) { 
 	unsigned int t;
 	while (b != 0) {
@@ -141,26 +129,43 @@ StegaXOR::StegaXOR(const string key_file) {
 	this->key_length = 0;
 
 	ifstream fd (key_file);
+
 	if (!fd.is_open()) {
-		cout << "[-] Error opening \"" << key_file << "\" to load key." << endl;;
-		cout << "Be sure the file exists." << endl;
-		exit(-1);
-	}
+		cout << "[-] Error opening \"" << key_file << "\" to load key." << endl;
+		cout << "Generation new key..." << endl;
 
-	for (int i = 0; i < 1024; i++) {
-		char buffer;
-		if (fd.eof()) {
-			this->key_length = i + 1;
-			break;
-		} else {
-			fd.read(&buffer, 1);
-			this->key[i] = buffer;
+		ofstream fd_ (key_file, ios_base::trunc);
+
+		if (!fd_.is_open()) {
+			cout << "[-] Error creating\"" << key_file << "\"" << endl;
+			cout << "Generation new key..." << endl;
+			exit(-1);
 		}
-	}
-	if (this->key_length == 0)
-		this->key_length = 1024;
 
-	fd.close();
+		for (unsigned short i = 0; i < 1024; i++) {
+			char byte = this->gen() % 256;
+			key[i] = byte;
+			fd_.write(&byte, 1);
+		}
+		fd_.close();
+
+		cout << "Key generated" << endl;
+	} else {
+		for (int i = 0; i < 1024; i++) {
+			char buffer;
+			if (fd.eof()) {
+				this->key_length = i + 1;
+				break;
+			} else {
+				fd.read(&buffer, 1);
+				this->key[i] = buffer;
+			}
+		}
+		if (this->key_length == 0)
+			this->key_length = 1024;
+
+		fd.close();
+	}	
 }
 
 
@@ -181,7 +186,7 @@ void StegaXOR::encrypt_b2b(const char *input, const unsigned int input_len) {
     char byte;
 
     for (unsigned int i = 0; i < random_data_length; i++) {
-    	this->encrypted_bytes[i] = gen() % 256;
+    	this->encrypted_bytes[i] = this->gen() % 256;
     }
 
     unsigned int data_index = 0;

@@ -5,18 +5,10 @@
 #include <fstream>
 #include <random>
 #include <string>
+#include <cstring>
 
 
 using namespace std;
-
-
-// extern char *data_bytes;
-
-
-// void encrypt_b2f(const char *input, const unsigned int data_len, const string output_file, const string key_file);
-// unsigned int encrypt_b2b(const char *input, const unsigned int data_len, const string key_file);
-// void decrypt_f2f(const string input_file, const string output_file, const string key_file);
-// unsigned int decrypt_b2b(const char *input, const unsigned int input_len, const string key_file);
 
 
 class StegaXOR {
