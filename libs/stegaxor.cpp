@@ -217,13 +217,13 @@ void StegaXOR::decrypt_b2b(const char *input, const unsigned int input_len) {
     	this->decrypted_bytes[i] = input[data_index] ^ this->key[key_index];
     	data_index = (data_index + this->shift) % input_len;
     	key_index = (key_index + 1) % this->key_length;
+    	if (this->decrypted_bytes[i] == '\0') {
+	    	this->decrypted_len = i;
+	    	break;
+	    }
     	if (i == input_len) {
-	    	if (this->decrypted_bytes[i] == '\0') {
-	    		this->decrypted_len = i;
-	    	} else {
-	    		this->decrypted_bytes = new char[1];
-	    		this->decrypted_len = 0;
-	    	}
+	    	this->decrypted_bytes = new char[1];
+	    	this->decrypted_len = 0;
 	    	break;
 	    }
     	i++;
