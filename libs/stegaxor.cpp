@@ -12,14 +12,14 @@ static unsigned int gcd(unsigned int a, unsigned int b) {
 }
 
 
-// static unsigned int get_file_size(const string file) {
-// 	ifstream file_;
-// 	file_.open(file);
-// 	file_.seekg(0, ios_base::end);
-// 	unsigned int len = (unsigned int)file_.tellg();
-// 	file_.close();
-// 	return len;
-// }
+static unsigned int get_file_size(const string file) {
+	ifstream file_;
+	file_.open(file);
+	file_.seekg(0, ios_base::end);
+	unsigned int len = (unsigned int)file_.tellg();
+	file_.close();
+	return len;
+}
 
 
 // void encrypt_b2f(const char *input, const unsigned int data_len, const string output_file, const string key_file) {
@@ -65,58 +65,6 @@ static unsigned int gcd(unsigned int a, unsigned int b) {
 //     output.seekp(data_index, ios_base::beg);
 //     output.write(&byte, 1);
 
-// 	if (output.is_open())
-// 		output.close();
-// }
-
-
-// void decrypt_f2f(const string input_file, const string output_file, const string key_file) {
-// 	unsigned int data_len = get_file_size(input_file);
-// 	char *data_bytes = new char [data_len];
-// 	char *decrypted_bytes = new char [data_len];
-// 	unsigned int decrypted_len = 0; 
-
-// 	ifstream input (input_file);
-// 	ofstream output (output_file, ios_base::trunc);
-
-// 	if (!input.is_open()) {
-// 		cerr << "Can not open file" << endl;
-// 		exit(-1);
-// 	}
-
-// 	if (!output.is_open()) {
-// 		cerr << "Can not open or create file" << endl;
-// 		exit(-1);
-// 	}
-
-// 	load_key(key_file);
-
-// 	input.read(data_bytes, data_len);
-
-// 	unsigned int shift = key_length % data_len; 
-
-// 	unsigned int i = 0;
-// 	unsigned int data_index = 0;
-//     unsigned int key_index = 0;
-
-//     cout << "Shift: " << shift << endl;
-//     cout << "Random length: " << data_len << endl;
-
-// 	while (true) {
-//     	decrypted_bytes[i] = data_bytes[data_index] ^ key[key_index];
-//     	data_index = (data_index + shift) % data_len;
-//     	key_index = (key_index + 1) % key_length;
-//     	if (decrypted_bytes[i] == '\0') {
-//     		decrypted_len = i;
-//     		break;
-//     	}
-//     	i++;
-//     }
-
-//     output.write(decrypted_bytes, decrypted_len);
-
-// 	if (input.is_open())
-// 		input.close();
 // 	if (output.is_open())
 // 		output.close();
 // }
@@ -228,6 +176,118 @@ void StegaXOR::decrypt_b2b(const char *input, const unsigned int input_len) {
 	    }
     	i++;
     }
+}
+
+
+void StegaXOR::encrypt_f2f(const string input_file, const string output_file) {
+	unsigned int data_len = get_file_size(input_file);
+	char *data_bytes = new char [data_len];
+
+	ifstream input (input_file);
+	ofstream output (output_file, ios_base::trunc);
+
+	if (!input.is_open()) {
+		cerr << "Can not open file" << endl;
+		exit(-1);
+	}
+
+	if (!output.is_open()) {
+		cerr << "Can not open or create file" << endl;
+		exit(-1);
+	}
+
+	input.read(data_bytes, data_len);
+
+	for (unsigned int i = data_len * 2; i < data_len * 3; i++) {
+    	if (gcd(i, this->key_length % i) == 1) {
+    		this->shift = this->key_length % i;
+    		this->random_data_length = i;
+    		break;
+    	}
+    }
+
+    cout << "Shift: " << this->shift << endl;
+    cout << "Random length: " << this->random_data_length << endl;
+
+    this->encrypted_bytes = new char [this->random_data_length];
+
+    for (unsigned int i = 0; i < this->random_data_length; i++) {
+    	this->encrypted_bytes[i] = this->gen() % 256;
+    }
+
+    unsigned int data_index = 0;
+    unsigned int key_index = 0;
+    
+    for (unsigned int i = 0; i < data_len; i++) {
+    	this->encrypted_bytes[data_index] = data_bytes[i] ^ this->key[key_index];
+    	data_index = (data_index + this->shift) % this->random_data_length;
+    	key_index = (key_index + 1) % this->key_length;
+    }
+
+    this->encrypted_bytes[data_index] = '\0' ^ this->key[key_index];
+    this->encrypted_len = this->random_data_length;
+
+    output.write(this->encrypted_bytes, this->encrypted_len);
+
+	if (input.is_open())
+		input.close();
+	if (output.is_open())
+		output.close();
+}
+
+
+void StegaXOR::decrypt_f2f(const string input_file, const string output_file) {
+	unsigned int data_len = get_file_size(input_file);
+	char *data_bytes = new char [data_len];
+
+	ifstream input (input_file);
+	ofstream output (output_file, ios_base::trunc);
+
+	if (!input.is_open()) {
+		cerr << "Can not open file" << endl;
+		exit(-1);
+	}
+
+	if (!output.is_open()) {
+		cerr << "Can not open or create file" << endl;
+		exit(-1);
+	}
+
+	input.read(data_bytes, data_len);
+
+	this->shift = this->key_length % data_len; 
+
+	unsigned int i = 0;
+	unsigned int data_index = 0;
+    unsigned int key_index = 0;
+
+    cout << "Shift: " << this->shift << endl;
+    cout << "Random length: " << data_len << endl;
+
+    this->decrypted_bytes = new char [data_len];
+
+	while (true) {
+    	this->decrypted_bytes[i] = data_bytes[data_index] ^ this->key[key_index];
+    	data_index = (data_index + this->shift) % data_len;
+    	key_index = (key_index + 1) % this->key_length;
+    	if (this->decrypted_bytes[i] == '\0') {
+	    	this->decrypted_len = i;
+	    	break;
+	    }
+    	if (i == data_len) {
+	    	this->decrypted_bytes = new char[1];
+	    	this->decrypted_len = 0;
+	    	break;
+	    }
+    	i++;
+    }
+
+    output.write(this->decrypted_bytes, this->decrypted_len);
+
+	if (input.is_open())
+		input.close();
+	if (output.is_open())
+		output.close();
 }
 
 

@@ -18,6 +18,8 @@ public:
 
 	void encrypt_b2b(const char *input, const unsigned int input_len);
 	void decrypt_b2b(const char *input, const unsigned int input_len);
+	void encrypt_f2f(const string input_file, const string output_file);
+	void decrypt_f2f(const string input_file, const string output_file);
 	char *get_encrypted();
 	char *get_decrypted();
 	unsigned int get_encrypted_len();
