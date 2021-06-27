@@ -22,54 +22,6 @@ static unsigned int get_file_size(const string file) {
 }
 
 
-// void encrypt_b2f(const char *input, const unsigned int data_len, const string output_file, const string key_file) {
-// 	load_key(key_file);
-
-// 	ofstream output (output_file, ios_base::trunc);
-
-// 	if (!output.is_open()) {
-// 		cerr << "Can not open or create file" << endl;
-// 		exit(-1);
-// 	}
-
-//     for (unsigned int i = data_len * 2; i < data_len * 3; i++) {
-//     	if (gcd(i, key_length % i) == 1) {
-//     		shift = key_length % i;
-//     		random_data_length = i;
-//     		break;
-//     	}
-//     }
-
-//     cout << "Shift: " << shift << endl;
-//     cout << "Random length: " << random_data_length << endl;
-
-//     char byte;
-
-//     for (unsigned int i = 0; i < random_data_length; i++) {
-//     	byte = gen() % 256;
-//     	output.write(&byte, 1);
-//     }
-
-//     unsigned int data_index = 0;
-//     unsigned int key_index = 0;
-    
-//     for (unsigned int i = 0; i < data_len; i++) {
-//     	byte = input[i] ^ key[key_index];
-//     	output.seekp(data_index, ios_base::beg);
-//     	output.write(&byte, 1);
-//     	data_index = (data_index + shift) % random_data_length;
-//     	key_index = (key_index + 1) % key_length;
-//     }
-
-//     byte = '\0' ^ key[key_index];
-//     output.seekp(data_index, ios_base::beg);
-//     output.write(&byte, 1);
-
-// 	if (output.is_open())
-// 		output.close();
-// }
-
-
 StegaXOR::StegaXOR(const string key_file) {
 	this->random_data_length = 0;
 	this->shift = 0;
