@@ -18,8 +18,8 @@ extern string input_file;
 
 
 int main(int argc, char const *argv[]) {
-	StegaXOR cryptor (string("makefile"));
-	cryptor.encrypt_f2f(string("test_test.txt"), string("output"));
+	StegaXOR cryptor (string("xor.key"));
+	cryptor.encrypt_f2f(string("makefile"), string("output"));
 	cryptor.decrypt_f2f(string("output"), string("test.txt"));
 	return 0;
 }
