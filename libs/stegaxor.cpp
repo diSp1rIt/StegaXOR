@@ -227,8 +227,8 @@ void StegaXOR::decrypt_f2f(const string input_file, const string output_file) {
 	    	break;
 	    }
     	if (i == data_len) {
-	    	this->decrypted_bytes = new char[1];
-	    	this->decrypted_len = 0;
+	    	this->decrypted_bytes;
+	    	this->decrypted_len = i;
 	    	break;
 	    }
     	i++;
